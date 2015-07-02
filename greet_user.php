@@ -1,18 +1,35 @@
-<?php 
+ <?php 
 /*
 Plugin Name: Greet User
 */ 
-	function greet_user() {
-		$username = $_GET['user'];
-		if( $username ){
-			echo "Hi ". $username ."!";
-		} else {
-			echo "Why not tell me your name";
-		}
-	}
+
+$username_get = $_GET['user'];
+$username_post = $_POST['name_of_user'];	
+
+function greet_user() {
+	global $username_get;
 	
-	function greet_user_shortcode( $atts, $content, $tag ){
-		greet_user();
+	if( $username_get ){
+		echo "Hi ". $username_get ."!";
+	} else {
+		echo "Why not tell me your name, by adding ?name=YOUR NAME to the URL above ^";
 	}
-	add_shortcode('greet_user', 'greet_user_shortcode'); 
+}
+
+function store_user_names(){
+	global $username_get;
+	global $username_post;
+
+	if( $username_get ){ 
+		$username_post = $username_get;
+		echo $username_post;
+	}
+	 
+}
+
+function greet_user_shortcode( $atts, $content, $tag ){
+	greet_user();
+	store_user_names();
+}
+add_shortcode('greet_user', 'greet_user_shortcode'); 
 ?>
